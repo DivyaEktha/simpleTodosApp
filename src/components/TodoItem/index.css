@@ -1,0 +1,12 @@
+li {
+  list-style-type: none;
+  padding-right: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+button {
+  background-color: #ffffff;
+  color: #ff0b37;
+  border-radius: 10px;
+  border: 2px solid #ff0b37;
+}

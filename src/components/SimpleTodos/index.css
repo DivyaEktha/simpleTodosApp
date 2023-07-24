@@ -1,0 +1,13 @@
+.heading {
+  color: #ff8542;
+  text-align: center;
+  padding-top: 30px;
+}
+.container {
+  background-color: #ffc2a0;
+  padding: 40px;
+}
+.todo-container {
+  background-color: #ffffff;
+  border-radius: 15px;
+}

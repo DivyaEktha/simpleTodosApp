@@ -1,7 +1,6 @@
-import {Component} from 'react'
+import {useState} from 'react'
 
 import './index.css'
-
 import TodoItem from '../TodoItem'
 
 const initialTodosList = [
@@ -39,24 +38,72 @@ const initialTodosList = [
   },
 ]
 
-// Write your code here
+const SimpleTodos = () => {
+  const [todos, setTodos] = useState(initialTodosList)
+  const [inputValue, setInputValue] = useState('')
 
-export default class SimpleTodos extends Component {
-  state = {todosList: initialTodosList}
+  const handleAddClick = () => {
+    if (inputValue.trim() !== '') {
+      const match = inputValue.trim().match(/(\D+)(\d+)$/)
 
-  render() {
-    const {todosList} = this.state
-    return (
-      <div className="container">
-        <div className="todo-container">
-          <h1 className="heading">Simple Todos</h1>
-          <ul>
-            {todosList.map(eachTodo => (
-              <TodoItem key={eachTodo.id} details={eachTodo} />
-            ))}
-          </ul>
-        </div>
-      </div>
+      if (match) {
+        const text = match[1].trim()
+        const count = parseInt(match[2], 10) || 1
+
+        const newTodos = Array.from({length: count}, (_, index) => ({
+          id: todos.length + index + 1,
+          title: `${text} ${index + 1}`,
+        }))
+
+        setTodos(prevTodos => [...prevTodos, ...newTodos])
+      } else {
+        const newTodo = {
+          id: todos.length + 1,
+          title: inputValue.trim(),
+        }
+
+        setTodos(prevTodos => [...prevTodos, newTodo])
+      }
+
+      setInputValue('')
+    }
+  }
+
+  const handleDelete = id => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id))
+  }
+
+  const handleUpdate = (id, newText) => {
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? {...todo, title: newText} : todo,
+      ),
     )
   }
+
+  const onChangeInput = event => {
+    setInputValue(event.target.value)
+  }
+
+  return (
+    <div>
+      <h1>Simple Todos</h1>
+
+      <input type="text" value={inputValue} onChange={onChangeInput} />
+      <button type="button" onClick={handleAddClick}>
+        Add
+      </button>
+
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      ))}
+    </div>
+  )
 }
+
+export default SimpleTodos
